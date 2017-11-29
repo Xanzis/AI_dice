@@ -14,12 +14,12 @@ class Arena():
 		self.dice = Dice()
 		self.pot = 0
 	def getchoices(self):
-		choice1 = self.player1func(zip(self.dice.h1, self.dice.h2), self.choice_history)
+		choice1 = self.player1func(zip(self.dice.h1, self.dice.h2), self.choice_history) # pay attention to order, function makers
 		choice2 = self.player2func(zip(self.dice.h1, self.dice.h2), self.choice_history)
-		self.choice_history.append((choice1, choice2))
+		self.choice_history.append((choice1, choice2)) # gets choices from the functions being used. 
 		return choice1, choice2
 	def run(self):
-		pot = 0
+		pot = 0 # this function implements a roll and scoring.
 		for _ in range(self.matches):
 			self.dice = Dice()
 			for __ in range(self.rounds_per_match):
@@ -32,15 +32,17 @@ class Arena():
 						pot += 2
 		return pot
 
-	@classmethod
+	@classmethod # the following method is for manually playing with a function as the other player
 	def run_manual(cls, rounds_per_match, matches, ai_func):
 		for _ in range(matches):
-			print "On round " + str(_ + 1) + " of " + str(matches)
+			print "_______________"
+			print "On match " + str(_ + 1) + " of " + str(matches)
 			dice = Dice()
 			choice_history = []
 			pot = 0
 			persistant = 0
 			for __ in range(rounds_per_match):
+				print "---"
 				print "Round " + str(__ + 1)
 				bet = input("Place your bet (-1 or 1)\n")
 				ai_bet = ai_func(zip(dice.h1, dice.h2), choice_history)
