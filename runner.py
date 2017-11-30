@@ -72,7 +72,7 @@ def sample_function(dice_hist, choice_hist):
 	return 1
 
 def main():
-	Arena.run_manual(4, 2, sample_function)
+	Arena.run_manual(10, 2, sample_function)
 
 if __name__ == '__main__':
 	main()
