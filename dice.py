@@ -1,4 +1,5 @@
 import random
+import time
 
 class Dice():
 	def __init__(self):
@@ -6,6 +7,7 @@ class Dice():
 		self.d2 = [[-1, 1],[-1, 1],[-1, 1]]
 		self.h1 = [] # history of die 1
 		self.h2 = [] # history of die 2
+		random.seed(time.time())
 	def roll(self):
 		index1 = (random.randint(0, 2), random.randint(0, 1))
 		index2 = (random.randint(0, 2), random.randint(0, 1))

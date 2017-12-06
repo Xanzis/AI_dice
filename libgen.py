@@ -18,14 +18,14 @@ Within the 5 values, the most recent iteration appears at the end.
 Desired output requires another 2 bytes.
 10 is heads, 00 is tails, 01 is each response is equally good/bad.
 NOTE: For the network, it may be better to use two neurons as output
-These 42 bits are stored in 6 bytes. (2 bits of desired output are directly after 40 in bits)
+These 42 bits are stored in 6 bytes. (2 bit of desired output are directly after 40 in bits)
 Last 6 bits of each 6 byte chunk are empty :(
 """
 
 import dice
 import runner
-import struct
 import numpy as np
+import sys
 
 class LibGen():
 	def __init__(self):
@@ -40,6 +40,11 @@ class LibGen():
 		gen = runner.Generator(p1func, p2func, rpm, hist_len)
 		for _ in range(num):
 			dice_h, choice_h, ideal = gen.run()
+			# I originally wanted ideal to be 0, 1 or 0.5 - with the 0.5 option present so that
+			# the ambiguity of some situations could be reflected. However, this doesn't mesh
+			# well with standard classifier training systems. Instead, ideal will be 0 or 1, 
+			# and in the desired outputs will eventually be a two-long array, so that argmax 
+			# will give the bet. See runner.py for decisions on what to value how.
 			dice_h = (hist_len - len(dice_h)) * [(0, 0)] + dice_h
 			choice_h = (hist_len - len(choice_h)) * [(0, 0)] + choice_h
 			self_ch, othr_ch = zip(*choice_h)
@@ -54,6 +59,8 @@ class LibGen():
 			self.othr_d.append(othr_d)
 			self.self_d.append(self_d)
 			self.ideals.append(ideal)
+			print('.'.rjust((60 * _) / num))
+			sys.stdout.write("\033[F")
 	def clear(self):
 		self.othr_ch = []
 		self.self_ch = []
@@ -92,7 +99,7 @@ class LibI():
 				oc = [_ * 0.5 for _ in s[5:10]]
 				sd = [_ * 0.5 for _ in s[10:15]]
 				od = [_ * 0.5 for _ in s[15:20]]
-				idl = s[20] * 0.5
+				idl = s[20] * 0.5 # should still work even with one bit for idl - gives either 1 or 0
 				self.scs.append(sc)
 				self.ocs.append(oc)
 				self.sds.append(sd)
@@ -115,14 +122,23 @@ class LibI():
 		VALIDATION_SIZE = 10000
 		TEST_SIZE = 10000
 		in_data, out_data = self.compile_data(loc)
-		in_data = np.reshape(in_data, (len(in_data), len(in_data[0]), 1))
+		#in_data = np.reshape(in_data, (len(in_data), len(in_data[0]), 1))
 		# This next line assumes only one output neuron
-		out_data = np.reshape(out_data, (len(out_data), 1, 1))
+		#out_data = np.reshape(out_data, (len(out_data), 1, 1))
+		in_len = len(in_data[0])
+		try:
+			out_len = len(out_data[0])
+		except:
+			out_len = 1
+		for i in range(len(in_data)):
+			in_data[i] = np.reshape(in_data[i], (in_len, ))
+			out_data[i] = np.reshape(out_data[i], (out_len, ))
 		data = zip(in_data, out_data)
+		#print data[0]
 		train_data = data[0:TRAINING_SIZE]
 		valid_data = data[TRAINING_SIZE:TRAINING_SIZE+VALIDATION_SIZE]
 		test__data = data[TRAINING_SIZE+VALIDATION_SIZE:TRAINING_SIZE+VALIDATION_SIZE+TEST_SIZE]
-		print test__data[0:1]
+		#print test__data[0:1]
 		return train_data, valid_data, test__data
 		
 
@@ -145,7 +161,7 @@ class LibO():
 			sc = [format(int(i * 2), '02b') for i in scs[_]]
 			od = [format(int(i * 2), '02b') for i in ods[_]]
 			sd = [format(int(i * 2), '02b') for i in sds[_]]
-			idl = format(int(idls[_] * 2), '02b')
+			idl = format(int(idls[_] * 2), '02b') # At the moment, ideal is two bits - see other notes
 			to_add = "".join(sc) + "".join(oc) + "".join(sd) + "".join(od) + idl + "000000"
 			if len(to_add) != 48:
 				print "what in tarnation"
@@ -165,11 +181,12 @@ class LibO():
 
 
 def main():
-	#lg = LibGen()
-	#lg.generate(80000, runner.sample_function, runner.sample_function, 10, 5)
-	#lg.store('rand_v_rand.ts')
-	lI = LibI()
-	lI.load_datasets('rand_v_rand.ts')
+	lg = LibGen()
+	lg.generate(80000, runner.sample_function, runner.sample_function, 10, 5)
+	lg.store('rand_v_rand_sd.ts')
+	#lI = LibI()
+	#tr, v, te = lI.load_datasets('rand_v_rand.ts')
+	#print tr[0:5]
 
 
 
