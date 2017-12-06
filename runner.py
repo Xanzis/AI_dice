@@ -37,12 +37,15 @@ class Arena():
 			self.dice = Dice()
 			for __ in range(self.rounds_per_match):
 				choices = self.getchoices()
+				print "bets", choices
 				roll = self.dice.roll()
+				print "roll", roll
 				if choices[0] == choices[1]:
 					if choices[0] == roll[0]:
 						pot += 2
 					if choices[1] == roll[1]:
 						pot += 2
+			print "New match. Current total pot:", pot
 		return pot
 
 	@classmethod # the following method is for manually playing with a function as the other player
@@ -128,10 +131,13 @@ class Generator():
 		h2_final = d.h2.pop()
 		other_choice = choice_history[1].pop()
 		# following 'ideal choice' specification can be tweaked to reflect what we want the network to do
+		ideal_choice = h1_final
+		"""
 		if other_choice == h1_final or other_choice == h2_final:
 			ideal_choice = other_choice
 		else:
 			ideal_choice = h1_final
+		"""
 		# Annoyingly, it looks like ideal will have to be a definite heads or tails for networks
 		# to train properly using standard classification techniques. We'll see how this goes: I guess
 		# it's a good start to focus on predicting the other player's guess, even if in the first round it

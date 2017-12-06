@@ -1,2 +1,2 @@
-model_checkpoint_path: "/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai2_sd"
-all_model_checkpoint_paths: "/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai2_sd"
+model_checkpoint_path: "/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown"
+all_model_checkpoint_paths: "/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown"

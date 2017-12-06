@@ -49,7 +49,7 @@ class AI1():
 		x_input = tf.placeholder(tf.float32, [None, 20])
 		y_input = tf.placeholder(tf.float32, [None, 2])
 
-		feeder = Feeder('aisd_v_aisd_test.ts')
+		feeder = Feeder('rvr_guessown.ts')
 
 		def layer(input, shape, activation, name):
 			with tf.name_scope(name):
@@ -168,8 +168,11 @@ class AIToData():
 
 def main():
 	#aid = AIToData('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai1_sd')
+	#lg = libgne.LibGen()
+	#lg.generate(40000, aid.ai_func, aid.ai_func, 10, 5)
+
 	#aid.generate(80000, 'aisd_v_aisd_test.ts')
-	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai2_sd')
+	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown')
 	ai.train()
 
 if __name__ == '__main__':

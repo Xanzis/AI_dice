@@ -183,7 +183,7 @@ class LibO():
 def main():
 	lg = LibGen()
 	lg.generate(80000, runner.sample_function, runner.sample_function, 10, 5)
-	lg.store('rand_v_rand_sd.ts')
+	lg.store('rvr_guessown.ts')
 	#lI = LibI()
 	#tr, v, te = lI.load_datasets('rand_v_rand.ts')
 	#print tr[0:5]
