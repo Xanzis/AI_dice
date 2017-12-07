@@ -131,13 +131,13 @@ class Generator():
 		h2_final = d.h2.pop()
 		other_choice = choice_history[1].pop()
 		# following 'ideal choice' specification can be tweaked to reflect what we want the network to do
-		ideal_choice = h1_final
-		"""
+		#ideal_choice = h1_final
+		
 		if other_choice == h1_final or other_choice == h2_final:
 			ideal_choice = other_choice
 		else:
 			ideal_choice = h1_final
-		"""
+		
 		# Annoyingly, it looks like ideal will have to be a definite heads or tails for networks
 		# to train properly using standard classification techniques. We'll see how this goes: I guess
 		# it's a good start to focus on predicting the other player's guess, even if in the first round it

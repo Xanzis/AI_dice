@@ -9,4 +9,6 @@ Goal now in progress: get a network to first figure out the die, then start bias
 
 rvr_guessown.ts : data produced with rand v rand, but ideals are just the value of the bot's die. Good balance of even / odd (ofc)
 ai_guessown : trained on rvr_guessown.ts and achieves 66% success. 
+aigo_v_aigo.ts : trained on ai_guessown playing against itself.
+- good news: roughly even heads-tails distribution (0.49872 tails)
 more coming soon ...

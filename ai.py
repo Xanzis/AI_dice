@@ -42,14 +42,15 @@ class Feeder():
 		return data
 
 class AI1():
-	def __init__(self, save_loc = None):
+	def __init__(self, save_loc, train_loc=None):
 		self.save_loc = save_loc
+		self.train_loc = train_loc
 		pass
 	def train(self):
 		x_input = tf.placeholder(tf.float32, [None, 20])
 		y_input = tf.placeholder(tf.float32, [None, 2])
 
-		feeder = Feeder('rvr_guessown.ts')
+		feeder = Feeder(self.train_loc)
 
 		def layer(input, shape, activation, name):
 			with tf.name_scope(name):
@@ -167,12 +168,12 @@ class AIToData():
 		self.lg.store(store_loc)
 
 def main():
-	#aid = AIToData('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai1_sd')
-	#lg = libgne.LibGen()
+	#aid = AIToData('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown')
+	#lg = libgen.LibGen()
 	#lg.generate(40000, aid.ai_func, aid.ai_func, 10, 5)
 
-	#aid.generate(80000, 'aisd_v_aisd_test.ts')
-	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown')
+	#aid.generate(80000, 'aigo_v_aigo.ts')
+	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/aigo2', train_loc='aigo_v_aigo.ts')
 	ai.train()
 
 if __name__ == '__main__':
