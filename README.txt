@@ -9,6 +9,13 @@ Goal now in progress: get a network to first figure out the die, then start bias
 
 rvr_guessown.ts : data produced with rand v rand, but ideals are just the value of the bot's die. Good balance of even / odd (ofc)
 ai_guessown : trained on rvr_guessown.ts and achieves 66% success. 
-aigo_v_aigo.ts : trained on ai_guessown playing against itself.
+aigo_v_aigo.ts : dataset on ai_guessown playing against itself.
 - good news: roughly even heads-tails distribution (0.49872 tails)
+aigo2: trained on aigo_v_aigo.ts
+aigo2_v_aigo2.ts : dataset generated with aigo2
+aigo3 : trained on aigo2_v_aigo2.ts 
+- good news: performance on validation data up to 0.7841
+- seems to confirm idea that eventually the bot models the behaviour of the other bot
+aigo3_v_aigo3.ts : self explainatory
+aigo4: trained on aigo3_v_aigo3. achieved 0.7698 accuracy (plateau possibly caused by uncertainty in dice. Figure out what theoretical max is)
 more coming soon ...

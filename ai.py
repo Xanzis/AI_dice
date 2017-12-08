@@ -125,15 +125,27 @@ class AIRunner():
 		self.x_input = tf.placeholder(tf.float32, [None, 20])
 		self.y_input = tf.placeholder(tf.float32, [None, 2])
 
+		self.W = {}
+		self.b = {}
+
+		"""
 		def layer(input, shape, activation, name):
 			with tf.name_scope(name):
 				W = tf.Variable(tf.random_uniform(shape) * 0.01)
 				b = tf.Variable(tf.random_uniform([shape[-1]]) * 0.01)
 				res = activation(tf.matmul(input, W) + b)
 			return res
+		"""
 
-		self.hidden = layer(self.x_input, [20, 10], tf.nn.sigmoid, 'hidden')
-		self.y = layer(self.hidden, [10, 2], lambda _: _, 'output')
+		def layer(self, input, shape, activation, name):
+			with tf.name_scope(name):
+				self.W[name] = tf.Variable(tf.random_uniform(shape) * 0.01)
+				self.b[name] = tf.Variable(tf.random_uniform([shape[-1]]) * 0.01)
+				res = activation(tf.matmul(input, self.W[name]) + self.b[name])
+			return res
+
+		self.hidden = layer(self, self.x_input, [20, 10], tf.nn.sigmoid, 'hidden')
+		self.y = layer(self, self.hidden, [10, 2], lambda _: _, 'output')
 
 		self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_input, logits=self.y))
 		self.train = tf.train.GradientDescentOptimizer(0.5).minimize(self.cost)
@@ -161,19 +173,19 @@ class AIToData():
 
 		self.ai_func = ai_func
 
-		self.arena = runner.Arena(ai_func, ai_func, 10, 100)
-		self.lg = libgen.LibGen()
+		#self.arena = runner.Arena(ai_func, ai_func, 10, 100)
+		#self.lg = libgen.LibGen()
 	def generate(self, num, store_loc):
 		self.lg.generate(num, self.ai_func, self.ai_func, 10, 5)
 		self.lg.store(store_loc)
 
 def main():
-	#aid = AIToData('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/ai_guessown')
+	#aid = AIToData('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/aigo3')
 	#lg = libgen.LibGen()
 	#lg.generate(40000, aid.ai_func, aid.ai_func, 10, 5)
 
-	#aid.generate(80000, 'aigo_v_aigo.ts')
-	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/aigo2', train_loc='aigo_v_aigo.ts')
+	#aid.generate(80000, 'aigo3_v_aigo3.ts')
+	ai = AI1('/Users/alehugh/Desktop/Programming/AI_dice/tf_saves/aigo4', train_loc='aigo3_v_aigo3.ts')
 	ai.train()
 
 if __name__ == '__main__':
